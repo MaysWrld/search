@@ -1,0 +1,94 @@
+/* public/style.css */
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 100px;
+    margin: 0;
+    min-height: 100vh;
+    background-color: #fff;
+}
+
+#logo {
+    font-size: 80px;
+    font-weight: 500;
+    color: #4285F4; /* Google Blue */
+    margin-bottom: 20px;
+}
+
+#search-container {
+    width: 90%;
+    max-width: 584px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#search-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#search-input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #dfe1e5;
+    border-radius: 24px;
+    box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
+    font-size: 16px;
+    outline: none;
+    transition: box-shadow 0.3s;
+}
+
+#search-input:focus {
+    box-shadow: 0 1px 6px rgba(32, 33, 36, 0.45);
+}
+
+#search-button {
+    margin-top: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #f8f9fa;
+    border-radius: 4px;
+    color: #3c4043;
+    font-size: 14px;
+    padding: 10px 15px;
+    cursor: pointer;
+    outline: none;
+}
+
+#results-container {
+    width: 90%;
+    max-width: 600px;
+    margin-top: 30px;
+    text-align: left;
+}
+
+.result-item {
+    margin-bottom: 20px;
+}
+
+.result-item a {
+    font-size: 20px;
+    color: #1a0dab; /* Link blue */
+    text-decoration: none;
+}
+
+.result-item a:hover {
+    text-decoration: underline;
+}
+
+.result-item .url {
+    color: #006621; /* URL green */
+    font-size: 14px;
+    margin-top: 2px;
+}
+
+.result-item p {
+    color: #545454;
+    font-size: 13px;
+    line-height: 1.5;
+    margin-top: 4px;
+}
