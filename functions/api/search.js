@@ -1,8 +1,14 @@
 // functions/api/search.js
+/**
+ * Cloudflare Pages Function: /api/search
+ * * 职责: 
+ * 1. 从 URL 查询参数中获取搜索词 (q)。
+ * 2. 从 KV Namespace (API_CONFIG) 中安全读取 api_key, cx_id 和 api_base_url。
+ * 3. 使用这些配置调用 Google Custom Search API (或其代理)。
+ * 4. 返回 JSON 结果给前端。
+ */
 
-// Cloudflare Pages Functions 默认使用 ES Module 导出
 export async function onRequest(context) {
-  // context 包含 request, env (环境变量和 KV 绑定), params 等信息
   const { env, request } = context;
   const url = new URL(request.url);
   
@@ -12,54 +18,54 @@ export async function onRequest(context) {
   if (!query) {
     return new Response(JSON.stringify({ error: "Missing query parameter 'q'." }), {
       status: 400,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
     });
   }
 
-  // 2. 从绑定的 KV Namespace (API_CONFIG) 中获取配置
-  // 确保您已在 CF Pages 设置中将 KV Namespace 绑定到 API_CONFIG 变量名
   try {
+    // 2. 从绑定的 KV Namespace (API_CONFIG) 中获取所有配置
     const apiKey = await env.API_CONFIG.get('api_key');
     const cxId = await env.API_CONFIG.get('cx_id');
+    const apiBaseUrl = await env.API_CONFIG.get('api_base_url'); // 可配置的 API 基础 URL
 
-    if (!apiKey || !cxId) {
-       // 如果 KV 中没有配置，返回错误提示
+    if (!apiKey || !cxId || !apiBaseUrl) {
        return new Response(JSON.stringify({ 
-           error: 'Search configuration is missing. Please log in to /admin to set API Key and CX ID.' 
+           error: 'Search configuration is incomplete. Please log in to /admin and set all required fields.' 
        }), {
            status: 500,
-           headers: { 'Content-Type': 'application/json' },
+           headers: { 'Content-Type': 'application/json; charset=utf-8' },
        });
     }
 
-    // 3. 构建 Google Custom Search API URL
-    const googleApiUrl = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cxId}&q=${encodeURIComponent(query)}`;
+    // 3. 构建完整的 API URL
+    // URL 格式: [apiBaseUrl]?key=[apiKey]&cx=[cxId]&q=[query]
+    const googleApiUrl = `${apiBaseUrl}?key=${apiKey}&cx=${cxId}&q=${encodeURIComponent(query)}`;
 
-    // 4. 向 Google API 发起请求
+    // 4. 向 API 发起请求
     const apiResponse = await fetch(googleApiUrl);
     const data = await apiResponse.json();
     
-    // 5. 检查 Google API 是否返回错误（例如配额用尽）
+    // 5. 检查 Google API 是否返回错误
     if (data.error) {
         console.error('Google API Error:', data.error.message);
         return new Response(JSON.stringify({ 
             error: `Google API Error: ${data.error.message}` 
         }), {
             status: apiResponse.status,
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json; charset=utf-8' },
         });
     }
 
-    // 6. 返回结果给前端
+    // 6. 返回结果
     return new Response(JSON.stringify(data), {
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
     });
 
   } catch (error) {
     console.error('API Proxy Function Error:', error);
-    return new Response(JSON.stringify({ error: 'Internal server error while processing the request.' }), {
+    return new Response(JSON.stringify({ error: `Internal server error: ${error.message}` }), {
       status: 500,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
     });
   }
 }
