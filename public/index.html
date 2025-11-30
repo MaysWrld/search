@@ -24,11 +24,11 @@
             padding-top: 0;
         }
 
-        /* Logo 标题风格调整 */
+        /* Logo 标题风格调整 (移除统一颜色，依靠内联样式) */
         #logo {
             font-size: 60px;
             font-weight: bold; 
-            color: #4285F4; 
+            /* 颜色已通过 HTML 中的 span 标签定义 */
             margin-bottom: 40px; 
             transition: all 0.3s ease-in-out;
             opacity: 1;
@@ -67,19 +67,19 @@
             border: none;
             outline: none;
             font-size: 16px;
-            padding: 10px 0; /* 调整垂直内边距 */
+            padding: 10px 0; 
             background: transparent;
         }
 
-        /* 搜索按钮样式：使用放大镜图标风格 */
+        /* 搜索按钮样式 */
         #search-button {
             background: transparent;
             border: none;
             color: #70757a; /* 灰色图标颜色 */
             cursor: pointer;
-            font-size: 20px; /* 增大图标尺寸 */
+            font-size: 20px; 
             padding: 0 10px; 
-            flex-shrink: 0; /* 防止按钮被压缩 */
+            flex-shrink: 0; 
             line-height: 1;
             outline: none;
         }
@@ -149,7 +149,15 @@
 <body>
 
     <div id="logo">
-        40012345
+        <span style="color:#4285F4;">4</span>
+        <span style="color:#EA4335;">0</span>
+        <span style="color:#FBBC05;">0</span>
+        <span style="color:#34A853;">1</span>
+        <span style="color:#4285F4;">2</span>
+        <span style="color:#EA4335;">3</span>
+        <span style="color:#FBBC05;">4</span>
+        <span style="color:#34A853;">5</span>
+        <span style="color:#4285F4;">6</span>
     </div>
 
     <div id="search-container">
