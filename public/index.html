@@ -4,28 +4,152 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>自定义搜索引擎</title>
-    <link rel="stylesheet" href="/style.css">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s ease-in-out; /* 为平滑过渡添加动画 */
+        }
+
+        /* --- 默认居中状态 (没有 .search-active 类时) --- */
+
+        body:not(.search-active) {
+            justify-content: center; /* 垂直居中 */
+            padding-top: 0;
+        }
+
+        #logo {
+            font-size: 60px;
+            font-weight: 300; /* 调整字体粗细 */
+            margin-bottom: 20px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        #search-container {
+            width: 90%;
+            max-width: 580px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        #results-container {
+            display: none; /* 初始状态隐藏结果区域 */
+        }
+
+
+        /* --- 搜索表单通用样式 --- */
+
+        #search-form {
+            display: flex;
+            border: 1px solid #dfe1e5;
+            border-radius: 24px;
+            padding: 5px 10px;
+            box-shadow: none;
+            transition: box-shadow 0.3s;
+        }
+
+        #search-form:hover {
+            box-shadow: 0 1px 6px rgba(32,33,36,0.28);
+        }
+
+        #search-input {
+            flex-grow: 1;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            padding: 10px;
+            background: transparent;
+        }
+
+        #search-button {
+            display: none; /* 默认隐藏搜索按钮 */
+        }
+
+
+        /* --- 搜索激活状态 (.search-active) --- */
+
+        body.search-active {
+            display: block; 
+            padding: 0;
+        }
+
+        body.search-active #logo {
+            position: fixed; /* 固定在左上角 */
+            top: 15px;
+            left: 20px;
+            font-size: 30px; /* 缩小 logo */
+            margin-bottom: 0;
+            z-index: 10;
+        }
+
+        body.search-active #search-container {
+            width: 70%;
+            max-width: 600px;
+            /* 腾出 logo 宽度和一些间隙 */
+            margin: 10px 0 20px 100px; 
+        }
+
+        /* 激活状态下显示结果并对齐 */
+        body.search-active #results-container {
+            display: block; 
+            width: 70%;
+            max-width: 600px;
+            margin-left: 100px; /* 结果与搜索框对齐 */
+            padding-top: 0;
+        }
+
+        /* 结果项样式 */
+        .result-item {
+            margin-bottom: 20px;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-item a {
+            font-size: 20px;
+            color: #1a0dab;
+            text-decoration: none;
+        }
+
+        .result-item .url {
+            color: #006621;
+            font-size: 14px;
+            margin: 4px 0;
+        }
+
+        .result-item p {
+            color: #545454;
+            font-size: 13px;
+            line-height: 1.5;
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
 
     <div id="logo">
-        <span style="color:#4285F4;">G</span>
-        <span style="color:#EA4335;">o</span>
-        <span style="color:#FBBC05;">o</span>
-        <span style="color:#4285F4;">g</span>
-        <span style="color:#34A853;">l</span>
-        <span style="color:#EA4335;">e</span>
+        40012345
     </div>
 
     <div id="search-container">
         <form id="search-form">
             <input type="text" id="search-input" name="q" placeholder="输入搜索内容..." required>
-            <button type="submit" id="search-button">Google 搜索</button>
+            <button type="submit" id="search-button">搜索</button>
         </form>
     </div>
     
     <div id="results-container">
-        </div>
+    </div>
 
     <script>
         document.getElementById('search-form').addEventListener('submit', async function(e) {
@@ -33,6 +157,9 @@
             const query = document.getElementById('search-input').value;
             const resultsContainer = document.getElementById('results-container');
             
+            // 激活搜索模式，触发 CSS 样式切换（居中 -> 左上角）
+            document.body.classList.add('search-active'); 
+
             resultsContainer.innerHTML = '正在搜索...'; // 提示用户
 
             // 调用 Pages Function 代理 API
